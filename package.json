@@ -1,0 +1,12 @@
+{
+  "name": "discord-n8n-bridge",
+  "version": "1.0.0",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "axios": "^1.7.9"
+  }
+}
