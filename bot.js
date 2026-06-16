@@ -13,11 +13,19 @@ const client = new Client({
 // Discord থেকে n8n এ message পাঠানো
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  const allowedChannels = [process.env.CHANNEL_ID, process.env.PUBLIC_CHANNEL_ID];
-  if (!allowedChannels.includes(message.channelId)) return;
+
+  const privateChannelId = process.env.CHANNEL_ID;
+  const publicChannelId = process.env.PUBLIC_CHANNEL_ID;
+
+  if (message.channelId !== privateChannelId && message.channelId !== publicChannelId) return;
+
+  // কোন channel থেকে এলো সেই অনুযায়ী webhook
+  const webhookUrl = message.channelId === publicChannelId
+    ? process.env.PUBLIC_WEBHOOK_URL
+    : process.env.WEBHOOK_URL;
 
   try {
-    await axios.post(process.env.WEBHOOK_URL, {
+    await axios.post(webhookUrl, {
       username: message.author.username,
       userId: message.author.id,
       content: message.content,
